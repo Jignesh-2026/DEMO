@@ -1,0 +1,348 @@
+Write the program with different features of C# 
+a.	Function Overloading 
+Code:
+using System;
+
+class Program
+{
+    static int Add(int a, int b)
+    {
+        return a + b;
+    }
+
+    static int Add(int a, int b, int c)
+    {
+        return a + b + c;
+    }
+
+    static double Add(double a, double b)
+    {
+        return a + b;
+    }
+
+    static int Add(int a, int b, int c, int d)
+    {
+        return a + b + c + d;
+    }
+
+    static void Main()
+    {
+        Console.WriteLine("Add(100, 200) = " + Add(100, 200));
+        Console.WriteLine("Add(100, 200, 300) = " + Add(100, 200, 300));
+        Console.WriteLine("Add(100.5, 200.5) = " + Add(100.5, 200.5));
+        Console.WriteLine("Add(100, 200, 300, 400) = " + Add(100, 200, 300, 400));
+        
+    }
+}
+
+b.	Inheritance (all types) 
+•	Single level inheritance:
+Code:
+using System;
+ 
+class Person
+{
+    public void ShowName()
+    {
+        Console.WriteLine("Name: Pranav");
+    }
+}
+ 
+class Student : Person
+{
+    public void ShowCourse()
+    {
+        Console.WriteLine("Course: Bsc.IT");
+    }
+}
+ 
+class Program
+{
+    static void Main()
+    {
+        Student s = new Student();
+        s.ShowName();
+        s.ShowCourse();
+    }
+}
+
+
+•	Multilevel Inheritance:
+Code:
+using System;
+ 
+class Vehicle
+{
+    public void Start()
+    {
+        Console.WriteLine("SRM");
+    }
+}
+ 
+class Car : Vehicle
+{
+    public void Drive()
+    {
+        Console.WriteLine("College");
+    }
+}
+ 
+class SportsCar : Car
+{
+    public void Speed()
+    {
+        Console.WriteLine("kudal");
+    }
+}
+ 
+class Program
+{
+    static void Main()
+    {
+        SportsCar s = new SportsCar();
+        s.Start();
+        s.Drive();
+        s.Speed();
+    }
+}
+
+
+•	Hierarchical Inheritance
+Code:
+using System;
+ 
+class Employee
+{
+    public void Company()
+    {
+        Console.WriteLine("SRM College");
+    }
+}
+
+class Manager : Employee
+{
+    public void Manage()
+    {
+        Console.WriteLine("student is studying");
+    }
+}
+
+class Developer : Employee
+{
+    public void Code()
+    {
+        Console.WriteLine("Teacher is Teaching");
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Manager m = new Manager();
+        Developer d = new Developer();
+
+        m.Company();
+        m.Manage();
+
+        d.Company();
+        d.Code();
+    }
+}
+
+
+•	Multiple Inheritance (Using Interfaces)
+Code:
+using System;
+
+interface Work
+{
+void DoWork();
+}
+
+interface Salary
+{
+void GetSalary();
+}
+
+class Employee : Work, Salary
+{
+public void DoWork()
+{
+Console.WriteLine("Employee is Working.");
+}
+
+public void GetSalary()
+{
+Console.WriteLine("Salary Credited: Rs. 30,000");
+}
+}
+
+class Program
+{
+static void Main()
+{
+Employee e = new Employee();
+
+e.DoWork();
+e.GetSalary();
+}
+}
+
+
+5. Hybrid Inheritance
+Code:
+using System;
+ 
+class Vehicle
+{
+    public void Brand()
+    {
+        Console.WriteLine("Brand: TATA");
+    }
+ 
+    public void Year()
+    {
+        Console.WriteLine("Manufacturing Year: 2020");
+    }
+}
+ 
+interface Engine
+{
+    void EngineType();
+}
+ 
+class TATA : Vehicle, Engine
+{
+    public void EngineType()
+    {
+        Console.WriteLine("Engine: 3.0L Twin Turbo");
+    }
+}
+ 
+class Nano : TATA
+{
+    public void Model()
+    {
+        Console.WriteLine("Model: Nano");
+    }
+}
+ 
+class Program
+{
+    static void Main()
+    {
+        Nano car = new Nano();
+ 
+        car.Brand();
+        car.Year();
+        car.EngineType();
+        car.Model();
+    }
+}
+
+d.	Interfaces  
+Code:
+using System;
+ 
+interface Calculate
+{
+    void Add(int a, int b);
+}
+ 
+class Calculator : Calculate
+{
+    public void Add(int a, int b)
+    {
+        Console.WriteLine("Sum = " + (a + b));
+    }
+}
+ 
+class Program
+{
+    static void Main()
+    {
+        Calculator c = new Calculator();
+        c.Add(10, 20);
+    }
+}
+
+
+
+c.	Constructor overloading 
+Code:
+using System; 
+class BMW
+{
+    public BMW()
+    {
+        Console.WriteLine("Default Constructor");
+    }
+ 
+    public BMW(string brand)
+    {
+        Console.WriteLine("1 Parameter Constructor");
+        Console.WriteLine("Brand: " + brand);
+    }
+ 
+    public BMW(string brand, string model)
+    {
+        Console.WriteLine("2 Parameter Constructor");
+        Console.WriteLine("Brand: " + brand);
+        Console.WriteLine("Model: " + model);
+    }
+ 
+    public BMW(string brand, string model, int year)
+    {
+        Console.WriteLine("3 Parameter Constructor");
+        Console.WriteLine("Brand: " + brand);
+        Console.WriteLine("Model: " + model);
+        Console.WriteLine("Year: " + year);
+    }
+}
+ 
+class Program
+{
+    static void Main()
+    {
+        BMW car1 = new BMW();
+ 
+        BMW car2 = new BMW("BMW");
+ 
+        BMW car3 = new BMW("BMW", "X5");
+ 
+        BMW car4 = new BMW("BMW", "M5", 2024);
+    }
+}
+
+
+Exception handling
+Code:
+using System;
+class Program
+{
+    static void Main()
+    {
+        try
+        {
+            Console.Write("Enter Student Name: ");
+            string name = Console.ReadLine();
+
+            Console.Write("Enter Marks: ");
+            int marks = Convert.ToInt32(Console.ReadLine());
+
+            Console.WriteLine("Student Name: " + name);
+            Console.WriteLine("Marks: " + marks);
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine("Please enter valid marks.");
+        }
+        finally
+        {
+            Console.WriteLine("Program Done.");
+        }
+    }
+}
+
+

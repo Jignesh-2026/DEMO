@@ -1,0 +1,50 @@
+a.	Create an MVC application to perform basic Arithmetic Operations. 
+Code:	
+Model code:
+using System; 
+namespace Arithmetic.Models
+{
+    public class Calculator
+    {   
+            public double Number1 { get; set; }
+            public double Number2 { get; set; }
+            public double add { get; set; }
+            public double sub { get; set; }
+            public double mul { get; set; }
+            public double div { get; set; }
+
+    }
+}
+
+View:
+@model Calculator
+
+<h1>add of @Model.Number1 and @Model.Number2 is:  @Model.add</h1>
+<h1>sub of @Model.Number1 and @Model.Number2 is: @Model.sub</h1>
+<h1>mul of @Model.Number1 and @Model.Number2 is: @Model.mul</h1>
+<h1>div of @Model.Number1 and @Model.Number2 is: @Model.div</h1>
+
+Controller:
+using Arithmetic.Models;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Arithmetic.Controllers
+{
+    public class CalculatorsController : Controller
+    {
+        public IActionResult Index()
+        {
+            var c = new Calculator();
+            c.Number1 = 60;
+            c.Number2 = 10;
+            c.add = c.Number1 + c.Number2;
+            c.sub = c.Number1 - c.Number2;
+            c.mul = c.Number1 * c.Number2;
+            c.div = c.Number1 / c.Number2;
+            return View(c);
+        }
+    }
+}
+
+
+

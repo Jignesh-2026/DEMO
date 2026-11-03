@@ -1,0 +1,276 @@
+a. Create methods add(). multiply(), substract() ,divide() with suitable parameters
+and call these methods using concept of C# delegate.
+Code :
+myform.aspx.cs
+
+using System;
+using System.Web.UI;
+
+namespace WebApplication8
+{
+    public partial class WebForm1 : System.Web.UI.Page
+    {
+        delegate void del(int a, int b);
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+        }
+
+        public void Add(int a, int b)
+        {
+            TextBox1.Text = (a + b).ToString();
+        }
+
+        public void Sub(int a, int b)
+        {
+            TextBox2.Text = (a - b).ToString();
+        }
+
+        public void Mul(int a, int b)
+        {
+            TextBox3.Text = (a * b).ToString();
+        }
+
+        public void Div(int a, int b)
+        {
+            TextBox4.Text = (a / b).ToString();
+        }
+
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+            del d = new del(Add);
+            d += new del(Sub);
+            d += new del(Mul);
+            d += new del(Div);
+            d(45, 5);
+
+        }
+    }
+}
+myform.aspx
+<%@ Page Language="C#" AutoEventWireup="true"
+    CodeBehind="WebForm1.aspx.cs"
+    Inherits="WebApplication8.WebForm1" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Delegate Example</title>
+</head>
+
+<body>
+    <form id="form1" runat="server">
+
+        <div>
+
+            Addition is :
+            <asp:TextBox ID="TextBox1" runat="server"></asp:TextBox>
+
+            <br />
+            <br />
+
+            Subtraction is :
+            <asp:TextBox ID="TextBox2" runat="server"></asp:TextBox>
+
+            <br />
+            <br />
+
+            Multiplication is :
+            <asp:TextBox ID="TextBox3" runat="server"></asp:TextBox>
+
+            <br />
+            <br />
+
+            Division is :
+            <asp:TextBox ID="TextBox4" runat="server"></asp:TextBox>
+
+            <br />
+            <br />
+
+            <asp:Button ID="Button1"
+                runat="server"
+                Text="Calculate"
+                OnClick="Button1_Click" />
+
+        </div>
+
+    </form>
+</body>
+</html>
+
+
+
+b. Write a program using multicast delegate.
+Code :
+myform.aspx.cs
+using System;
+namespace EmployeeDemo
+{
+    public partial class Employee : System.Web.UI.Page
+    {
+        public delegate void EmployeeDelegate();
+
+        string name = "Pranav";
+        string department = "Accounts";
+        int salary = 25000;
+
+        protected void btnShow_Click(object sender, EventArgs e)
+        {
+            EmployeeDelegate emp = DisplayName;
+            emp += DisplayDepartment;
+            emp += DisplaySalary;
+
+            emp();
+        }
+
+        void DisplayName()
+        {
+            lblResult.Text += "Employee Name: " + name + "<br/>";
+        }
+
+        void DisplayDepartment()
+        {
+            lblResult.Text += "Department: " + department + "<br/>";
+        }
+
+        void DisplaySalary()
+        {
+            lblResult.Text += "Salary: " + salary;
+        }
+    }
+}
+myform.aspx
+<%@ Page Language="C#" AutoEventWireup="true"
+    CodeBehind="Employee.aspx.cs"
+    Inherits="EmployeeDemo.Employee" %>
+
+<!DOCTYPE html>
+<html>
+<head runat="server">
+    <title>Employee Data</title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <h2>Employee Information</h2>
+
+            <asp:Button ID="btnShow" runat="server"
+                Text="Show Employee Data"
+                OnClick="btnShow_Click" />
+
+            <br /><br />
+
+            <asp:Label ID="lblResult" runat="server"></asp:Label>
+        </div>
+    </form>
+</body>
+</html>
+
+
+
+
+c. Create a class BankAccount with AccountNumber and Balance.
+Implement property for Balance with validation (Balance cannot be negative).
+Code :
+myform.axpx.cs
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection.Emit;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System;
+
+namespace WebApplication2
+{
+    public partial class WebForm1 : System.Web.UI.Page
+    {
+        public class BankAccount
+        {
+            public double AccountNumber { get; set; }
+
+            public double Balance { get; set; }
+        }
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+        }
+
+        protected void CustomValidator1_ServerValidate(
+            object source,
+            System.Web.UI.WebControls.ServerValidateEventArgs args)
+        {
+            double balance = Convert.ToDouble(args.Value);
+
+            if (balance >= 0)
+            {
+                args.IsValid = true;
+            }
+            else
+            {
+                args.IsValid = false;
+            }
+        }
+
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+            if (Page.IsValid)
+            {
+                BankAccount account = new BankAccount();
+
+                account.AccountNumber = Convert.ToDouble(TextBox1.Text);
+
+                account.Balance =
+                    Convert.ToDouble(TextBox2.Text);
+
+                Label1.Text =
+                    "Account Number: " + account.AccountNumber +
+                    "<br/>Balance: " + account.Balance;
+            }
+        }
+    }
+}
+
+WebForm1.aspx.cs
+<%@ Page Language="C#" AutoEventWireup="true"
+    CodeBehind="WebForm1.aspx.cs"
+    Inherits="WebApplication2.WebForm1" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Bank Account</title>
+</head>
+
+<body>
+    <form id="form1" runat="server">
+        <div>
+            Account Number:
+            <asp:TextBox ID="TextBox1" runat="server"></asp:TextBox>
+
+            <br /><br />
+
+            Balance:
+            <asp:TextBox ID="TextBox2" runat="server"></asp:TextBox>
+
+            <asp:CustomValidator ID="CustomValidator1" runat="server" 
+                ControlToValidate="TextBox2"  ValidateEmptyText="true"
+    ErrorMessage="Balance cannot be negative"
+    ForeColor="Red"
+    OnServerValidate="CustomValidator1_ServerValidate"></asp:CustomValidator>
+            <br /><br />
+            <asp:Button ID="Button1"
+                runat="server"
+                Text="Create Account"
+                OnClick="Button1_Click" />
+
+            <br /><br />
+
+            <asp:Label ID="Label1" runat="server"></asp:Label>
+
+        </div>
+    </form>
+</body>
+</html>

@@ -1,0 +1,1093 @@
+Create the following application: 
+a. Create a web application to demonstrate the use of different types of Cookies. 
+Code :
+
+WebFom1.aspx
+
+@model PRACT5.Models.Product
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Product</title>
+</head>
+<body>
+    <h1>Add Product</h1>
+    <form asp-controller="Product" asp-action="Create" method="post">
+        <div>
+            <label asp-for="Name">Product Name</label>
+            <input asp-for="Name" type="text" />
+        </div>
+        <br />
+        <div>
+            <label asp-for="Price">Price</label>
+            <input asp-for="Price" type="number" step="0.01" />
+        </div>
+        <br />
+        <button type="submit">Save Product</button>
+    </form>
+</body>
+</html>
+WebForm1.aspx.cs
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace cookies
+{
+    public partial class WebForm1 : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+        }
+        protected void Button2_Click(object sender, EventArgs e)
+        {
+            HttpCookie c3 = new HttpCookie("data3");
+
+            c3["Fname"] = "Dhiraj";
+            c3["Lname"] = “Bagve";
+
+            c3.Secure = false;
+
+            Response.Cookies.Add(c3);
+
+            Response.Redirect("WebForm4.aspx");
+        }
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+            HttpCookie c1 = new HttpCookie("data1");
+
+            c1["Fname"] = "riya";
+            c1["Lname"] = "Naik";
+
+            c1.Secure = false;
+
+            Response.Cookies.Add(c1);
+
+            Response.Redirect("WebForm2.aspx");
+        }
+    }
+}
+WebFom2.aspx
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="WebForm2.aspx.cs" Inherits="cookies.WebForm2" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <h2>Web Form 2</h2>
+
+            <asp:Label ID="Label1"
+                runat="server"
+                Text="Data1:">
+            </asp:Label>
+            <br /><br />
+
+            <asp:Label ID="Label2"
+                runat="server">
+            </asp:Label>
+            <br /><br />
+            <asp:Button ID="Button1"
+                runat="server"
+                Text="Send Data"
+                OnClick="Button1_Click" />
+
+        </div>
+    </form>
+</body></html>
+
+WebForm2.aspx.cs
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace cookies
+{
+    public partial class WebForm2 : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            HttpCookie c1 = Request.Cookies["data1"];
+            if (c1 == null)
+            {
+                Label2.Text = "Data not found";
+                return;
+            }
+            string fname = c1["Fname"];
+            string lname = c1["Lname"];
+
+            if (fname == null)
+                fname = "";
+            if (lname == null)
+                lname = "";
+
+            Label2.Text = fname + " " + lname;
+        }
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+            HttpCookie c2 = new HttpCookie("data2");
+
+            c2["Fname"] = "rahul";
+            c2["Lname"] = “Bagve";	
+
+            c2.Secure = false;
+
+            Response.Cookies.Add(c2);
+
+            Response.Redirect("WebForm3.aspx");
+        }
+    }
+}
+WebFom3.aspx
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="WebForm3.aspx.cs" Inherits="cookies.WebForm3" %>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <h2>Web Form 3</h2>
+            <asp:Label ID="Label1"
+                runat="server"
+                Text="Data received:">
+            </asp:Label>
+            <br /><br />
+            <asp:Label ID="Label2"
+                runat="server">
+            </asp:Label>
+        </div>
+    </form>
+</body>
+</html>
+
+WebForm3.aspx.cs
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+namespace cookies
+{
+    public partial class WebForm3 : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            HttpCookie c2 = Request.Cookies["data2"];
+            if (c2 == null)
+            {
+                Label2.Text = "Data not found";
+                return;
+            }
+            string fname = c2["Fname"];
+            string lname = c2["Lname"];
+            if (fname == null)
+                fname = "";
+            if (lname == null)
+                lname = "";
+            Label2.Text = fname + " " + lname;
+        }
+    }
+}
+WebFom4.aspx
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="WebForm4.aspx.cs" Inherits="cookies.WebForm4" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+</head>
+<body>
+    <form id="form1" runat="server">
+
+        <div>
+            <h2>Web Form 4</h2>
+
+            <asp:Label ID="Label1"
+                runat="server"
+                Text="Data2:">
+            </asp:Label>
+
+            <br /><br />
+
+            <asp:Label ID="Label2"
+                runat="server">
+            </asp:Label>
+
+        </div>
+
+    </form>
+</body>
+    </html>
+
+WebForm4.aspx.cs
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+namespace cookies
+{
+    public partial class WebForm4 : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            HttpCookie c3 = Request.Cookies["data3"];
+            if (c3 == null)
+            {
+                Label2.Text = "Data not found";
+                return;
+            }
+            string fname = c3["Fname"];
+            string lname = c3["Lname"];
+            if (fname == null)
+                fname = "";
+            if (lname == null)
+                lname = "";
+            Label2.Text = fname + " " + lname;
+        }
+    }
+}
+
+
+
+
+b. Create a Product Table in SQL Server and perform Insert Operation using 
+Entity Framework Core. 
+Code :
+ApplicationDbContext.cs
+using Microsoft.EntityFrameworkCore;
+using pract5b.Models;
+
+namespace pract5b.Data
+{
+    public class ApplicationDbContext : DbContext
+    {
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+            : base(options)
+        {
+        }
+
+        public DbSet<Product> Products { get; set; }
+    }
+}
+Appsetting.json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=.\\SQLEXPRESS;Database=ProductDB;Trusted_Connection=True;TrustServerCertificate=True;"
+  },
+
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+
+  "AllowedHosts": "*"
+}
+Program.cs
+using Microsoft.EntityFrameworkCore;
+using pract5b.Data;
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")
+    ));
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Home/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
+}
+
+app.UseHttpsRedirection();
+app.UseRouting();
+
+app.UseAuthorization();
+
+app.MapStaticAssets();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}")
+    .WithStaticAssets();
+
+
+app.Run();
+
+Product.cs
+using System.ComponentModel.DataAnnotations;
+
+namespace pract5b.Models
+{
+    public class Product
+    {
+        [Key]
+        public int ProductId { get; set; }
+
+        public string ProductName { get; set; }
+
+        public decimal Price { get; set; }
+
+        public int Quantity { get; set; }
+    }
+}
+
+ProductController.cs
+using Microsoft.AspNetCore.Mvc;
+using pract5b.Data;
+using pract5b.Models;
+
+namespace pract5b.Controllers
+{
+    public class ProductController : Controller
+    {
+        private readonly ApplicationDbContext _context;
+
+        public ProductController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Insert(Product product)
+        {
+            _context.Products.Add(product);
+            _context.SaveChanges();
+
+            return Json(new { success = true, message = "Product inserted successfully!" });
+        }
+    }
+}
+
+indexcshtml.cs
+@model pract5b.Models.Product
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Product Insert</title>
+</head>
+
+<body>
+
+    <h2>Product Details</h2>
+
+    <form id="productForm">
+
+        <label>Product Name:</label>
+        <input type="text" id="ProductName" name="ProductName" required />
+
+        <br /><br />
+
+        <label>Price:</label>
+        <input type="number" id="Price" name="Price" step="0.01" required />
+
+        <br /><br />
+
+        <label>Quantity:</label>
+        <input type="number" id="Quantity" name="Quantity" required />
+
+        <br /><br />
+
+        <button type="submit">Insert Product</button>
+
+    </form>
+
+    <script>
+            document.getElementById("productForm").addEventListener("submit", async function (event) {
+
+                event.preventDefault();
+
+                const formData = new FormData(this);
+
+                const response = await fetch("/Product/Insert", {
+                    method: "POST",
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert(result.message);
+                    this.reset();
+                }
+            });
+    </script>
+
+</body>
+</html>
+
+
+
+c. Develop a web application to perform CRUD Operations (Create, Read, 
+Update, Delete) on Employee table using EF Core. 
+Code :
+ApplicationDbContext.cs
+using Microsoft.EntityFrameworkCore;
+using pract5b.Models;
+
+namespace pract5b.Data
+{
+    public class ApplicationDbContext : DbContext
+    {
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+            : base(options)
+        {
+        }
+
+        public DbSet<Product> Products { get; set; }
+
+        public DbSet<Employee> Employees { get; set; }
+    }
+}
+Appsetting.json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=.\\SQLEXPRESS;Database=ProductDB;Trusted_Connection=True;TrustServerCertificate=True;"
+  },
+
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+
+  "AllowedHosts": "*"
+}
+Program.cs
+using Microsoft.EntityFrameworkCore;
+using pract5b.Data;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")
+    ));
+
+var app = builder.Build();
+
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
+}
+
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+app.UseRouting();
+
+app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Employee}/{action=Index}/{id?}");
+
+app.Run();
+Employee.cs
+using System.ComponentModel.DataAnnotations;
+
+namespace pract5b.Models
+{
+    public class Employee
+    {
+        [Key]
+        public int EmployeeId { get; set; }
+
+        public string EmployeeName { get; set; }
+
+        public string Department { get; set; }
+
+        public decimal Salary { get; set; }
+    }
+}
+
+EmployeeController.cs
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using pract5b.Data;
+using pract5b.Models;
+
+namespace pract5b.Controllers
+{
+    public class EmployeeController : Controller
+    {
+        private readonly ApplicationDbContext _context;
+
+        public EmployeeController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+        public IActionResult Index()
+        {
+            var employees = _context.Employees.ToList();
+            return View(employees);
+        }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(Employee employee)
+        {
+            _context.Employees.Add(employee);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+        public IActionResult Edit(int id)
+        {
+            var employee = _context.Employees.Find(id);
+
+            if (employee == null)
+            {
+                return NotFound();
+            }
+
+            return View(employee);
+        }
+        [HttpPost]
+        public IActionResult Edit(Employee employee)
+        {
+            _context.Employees.Update(employee);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+        public IActionResult Delete(int id)
+        {
+            var employee = _context.Employees.Find(id);
+
+            if (employee == null)
+            {
+                return NotFound();
+            }
+
+            _context.Employees.Remove(employee);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+    }
+}
+
+indexcshtml.cs
+@model IEnumerable<pract5b.Models.Employee>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Employee Management</title>
+</head>
+
+<body>
+
+    <h2>Employee List</h2>
+
+    <a href="/Employee/Create">Add Employee</a>
+
+    <br /><br />
+
+    <table border="1" cellpadding="10">
+        <tr>
+            <th>Employee ID</th>
+            <th>Name</th>
+            <th>Department</th>
+            <th>Salary</th>
+            <th>Actions</th>
+        </tr>
+
+        @foreach (var employee in Model)
+        {
+            <tr>
+                <td>@employee.EmployeeId</td>
+                <td>@employee.EmployeeName</td>
+                <td>@employee.Department</td>
+                <td>@employee.Salary</td>
+
+                <td>
+                    <a href="/Employee/Edit/@employee.EmployeeId">
+                        Edit
+                    </a>
+
+                    |
+
+                    <a href="/Employee/Delete/@employee.EmployeeId"
+                       onclick="return confirm('Are you sure you want to delete this employee?');">
+                        Delete
+                    </a>
+                </td>
+            </tr>
+        }
+
+    </table>
+
+</body>
+</html>
+
+Create.cshtml
+@model pract5b.Models.Employee
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Add Employee</title>
+</head>
+
+<body>
+
+    <h2>Add Employee</h2>
+
+    <form asp-action="Create" method="post">
+
+        <label>Employee Name:</label>
+        <input type="text" name="EmployeeName" required />
+
+        <br /><br />
+
+        <label>Department:</label>
+        <input type="text" name="Department" required />
+
+        <br /><br />
+
+        <label>Salary:</label>
+        <input type="number" name="Salary" step="0.01" required />
+
+        <br /><br />
+
+        <button type="submit">Add Employee</button>
+
+    </form>
+
+    <br />
+
+    <a href="/Employee">Back to Employee List</a>
+
+</body>
+</html>
+
+
+Edit.cshtml
+@model pract5b.Models.Employee
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Edit Employee</title>
+</head>
+
+<body>
+
+    <h2>Edit Employee</h2>
+
+    <form asp-action="Edit" method="post">
+
+        <input type="hidden" name="EmployeeId"
+               value="@Model.EmployeeId" />
+
+        <label>Employee Name:</label>
+        <input type="text"
+               name="EmployeeName"
+               value="@Model.EmployeeName"
+               required />
+
+        <br /><br />
+
+        <label>Department:</label>
+        <input type="text"
+               name="Department"
+               value="@Model.Department"
+               required />
+
+        <br /><br />
+
+        <label>Salary:</label>
+        <input type="number"
+               name="Salary"
+               value="@Model.Salary"
+               step="0.01"
+               required />
+
+        <br /><br />
+
+        <button type="submit">Update Employee</button>
+
+    </form>
+
+    <br />
+
+    <a href="/Employee">Back to Employee List</a>
+
+</body>
+</html>
+
+
+
+d. Authentication and Authorization in ASP.NET Core.
+Code:
+ApplicationDbContext.cs
+sing Microsoft.EntityFrameworkCore;
+using pract5b.Models;
+
+namespace pract5b.Data
+{
+    public class ApplicationDbContext : DbContext
+    {
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+            : base(options)
+        {
+        }
+
+        public DbSet<Product> Products { get; set; }
+
+        public DbSet<Employee> Employees { get; set; }
+
+        public DbSet<User> Users { get; set; }
+    }
+}
+Appsetting.json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=.\\SQLEXPRESS;Database=ProductDB;Trusted_Connection=True;TrustServerCertificate=True;"
+  },
+
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+
+  "AllowedHosts": "*"
+}
+Program.cs
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
+using pract5b.Data;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")
+    ));
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login";
+        
+    });
+
+builder.Services.AddAuthorization();
+
+var app = builder.Build();
+
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
+}
+
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Account}/{action=Login}/{id?}");
+
+app.Run();
+User.cs
+using System.ComponentModel.DataAnnotations;
+
+namespace pract5b.Models
+{
+    public class User
+    {
+        [Key]
+        public int UserId { get; set; }
+
+        [Required]
+        public string Username { get; set; }
+
+        [Required]
+        public string PasswordHash { get; set; }
+    }
+}
+AccountController.cs
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using pract5b.Data;
+using pract5b.Models;
+
+namespace pract5b.Controllers
+{
+    public class AccountController : Controller
+    {
+        private readonly ApplicationDbContext _context;
+        private readonly PasswordHasher<User> _passwordHasher;
+
+        public AccountController(ApplicationDbContext context)
+        {
+            _context = context;
+            _passwordHasher = new PasswordHasher<User>();
+        }
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Register(User user, string password)
+        {
+            if (_context.Users.Any(u => u.Username == user.Username))
+            {
+                ViewBag.Message = "Username already exists!";
+                return View();
+            }
+
+            user.PasswordHash = _passwordHasher.HashPassword(user, password);
+
+            _context.Users.Add(user);
+            _context.SaveChanges();
+
+            return RedirectToAction("Login");
+        }
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(string username, string password)
+        {
+            var user = _context.Users
+                .FirstOrDefault(u => u.Username == username);
+
+            if (user == null)
+            {
+                ViewBag.Message = "Invalid username or password!";
+                return View();
+            }
+
+            var result = _passwordHasher.VerifyHashedPassword(
+                user,
+                user.PasswordHash,
+                password
+            );
+
+            if (result == PasswordVerificationResult.Failed)
+            {
+                ViewBag.Message = "Invalid username or password!";
+                return View();
+            }
+
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.Username)
+            };
+
+            var identity = new ClaimsIdentity(
+                claims,
+                CookieAuthenticationDefaults.AuthenticationScheme
+            );
+
+            var principal = new ClaimsPrincipal(identity);
+
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                principal
+            );
+
+            return RedirectToAction("Dashboard");
+        }
+        [Authorize]
+        public IActionResult Dashboard()
+        {
+            return View();
+        }
+
+        // Logout
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme
+            );
+
+            return RedirectToAction("Login");
+        }
+    }
+}
+Register.cshtml
+@model pract5b.Models.User
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Register</title>
+</head>
+
+<body>
+
+    <h2>Register</h2>
+
+    <form asp-action="Register" method="post">
+
+        <label>Username:</label>
+        <input type="text" name="Username" required />
+
+        <br /><br />
+
+        <label>Password:</label>
+        <input type="password" name="password" required />
+
+        <br /><br />
+
+        <button type="submit">Register</button>
+
+    </form>
+
+    <br />
+
+    <a href="/Account/Login">Already have an account? Login</a>
+
+    @if (ViewBag.Message != null)
+    {
+        <p>@ViewBag.Message</p>
+    }
+
+</body>
+</html>
+Login.cshtml
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Login</title>
+</head>
+
+<body>
+
+    <h2>Login</h2>
+
+    <form asp-action="Login" method="post">
+
+        <label>Username:</label>
+        <input type="text" name="username" required />
+
+        <br /><br />
+
+        <label>Password:</label>
+        <input type="password" name="password" required />
+
+        <br /><br />
+
+        <button type="submit">Login</button>
+
+    </form>
+
+    <br />
+
+    <a href="/Account/Register">Create New Account</a>
+
+    @if (ViewBag.Message != null)
+    {
+        <p>@ViewBag.Message</p>
+    }
+
+</body>
+</html>
+Dashboard.cshtml
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+
+    <h1>Hello, @User.Identity.Name! </h1>
+
+    <p>Welcome to your dashboard.</p>
+
+    <a href="/Account/Logout">
+        <button>Logout</button>
+    </a>
+
+</body>
+</html>
